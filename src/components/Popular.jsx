@@ -7,76 +7,148 @@ import { Link } from "react-router-dom";// Importing Link component for routing
 
 
 
+// function Popular() {
+
+//       // State to hold popular recipes
+//     const [popular, setPopular] = useState([]);
+
+//     // Fetching popular recipes when component mounts
+//     useEffect(() => {
+//         getPopular();
+//     }, []);
+
+//       // Function to fetch popular recipes
+//     const getPopular = async () => {
+
+//           // Checking if popular recipes exist in local storage
+//         const check = localStorage.getItem('popular');
+
+//         if (check && check !== "[object JSON]") {
+//           // Valid JSON data exists in local storage, setting state with it
+//           setPopular(JSON.parse(check));
+//         } else {
+//           // Fetch new data from API
+//           const api = await fetch(
+//             `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=8`
+//           );
+//           const data = await api.json();
+          
+        
+//           // Store valid JSON data in local storage
+//           localStorage.setItem('popular', JSON.stringify(data.recipes));
+//           setPopular(data.recipes);
+//           console.log(data); // Add this line to check API response
+//         }
+
+       
+        
+       
+//     }
+
+
+//     return (
+//         <div>
+//             <Wrapper>
+//                 <h3>Trending Recipes</h3>
+//                 <Splide
+//                 options={{
+//                     perPage: 5,
+//                     arrows: true,
+//                     pagination: false,
+//                     drag: "free",
+//                     gap: "5rem",
+//                 }}
+//                 >
+
+//                     {popular.map((recipe) => {
+//                         return (
+//                             <SplideSlide key={recipe.id}>
+
+//                                 <Card>
+//                                     <Link to={"/recipe/" + recipe.id}>
+//                                     <p>{recipe.title}</p>
+//                                     <img src={recipe.image} alt={recipe.title} />
+//                                     <Gradient />
+//                                     </Link>
+//                                 </Card>
+//                             </SplideSlide>
+//                         );
+//                     })}
+//                 </Splide>
+//             </Wrapper>
+//         </div>
+//     )
+// }
+
 function Popular() {
-
-      // State to hold popular recipes
     const [popular, setPopular] = useState([]);
-
-    // Fetching popular recipes when component mounts
+  
     useEffect(() => {
-        getPopular();
+      getPopular();
     }, []);
-
-      // Function to fetch popular recipes
+  
     const getPopular = async () => {
-
-          // Checking if popular recipes exist in local storage
-        const check = localStorage.getItem('popular');
-
-        if (check && check !== "[object JSON]") {
-          // Valid JSON data exists in local storage, setting state with it
+      const check = localStorage.getItem('popular');
+  
+      if (check && check !== "undefined") {
+        try {
           setPopular(JSON.parse(check));
-        } else {
-          // Fetch new data from API
+        } catch (error) {
+          console.error("Failed to parse JSON from local storage:", error);
+        }
+      } else {
+        try {
+          console.log("Fetching popular recipes...");
           const api = await fetch(
             `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=8`
           );
           const data = await api.json();
-        
-          // Store valid JSON data in local storage
-          localStorage.setItem('popular', JSON.stringify(data.recipes));
-          setPopular(data.recipes);
+          console.log(data); // Check API response
+  
+          if (data.recipes) {
+            localStorage.setItem('popular', JSON.stringify(data.recipes));
+            setPopular(data.recipes);
+          } else {
+            console.error("No recipes found:", data);
+          }
+        } catch (error) {
+          console.error("Error fetching popular recipes:", error);
         }
-
-       
-        
-       
-    }
-
-
+      }
+    };
+  
     return (
-        <div>
-            <Wrapper>
-                <h3>Trending Recipes</h3>
-                <Splide
-                options={{
-                    perPage: 5,
-                    arrows: true,
-                    pagination: false,
-                    drag: "free",
-                    gap: "5rem",
-                }}
-                >
-
-                    {popular.map((recipe) => {
-                        return (
-                            <SplideSlide key={recipe.id}>
-
-                                <Card>
-                                    <Link to={"/recipe/" + recipe.id}>
-                                    <p>{recipe.title}</p>
-                                    <img src={recipe.image} alt={recipe.title} />
-                                    <Gradient />
-                                    </Link>
-                                </Card>
-                            </SplideSlide>
-                        );
-                    })}
-                </Splide>
-            </Wrapper>
-        </div>
-    )
-}
+      <div>
+        <Wrapper>
+          <h3>Trending Recipes</h3>
+          <Splide
+            options={{
+              perPage: 5,
+              arrows: true,
+              pagination: false,
+              drag: "free",
+              gap: "5rem",
+            }}
+          >
+            {popular.map((recipe) => {
+              return (
+                <SplideSlide key={recipe.id}>
+                  <Card>
+                    <Link to={"/recipe/" + recipe.id}>
+                      <p>{recipe.title}</p>
+                      <img src={recipe.image} alt={recipe.title} />
+                      <Gradient />
+                    </Link>
+                  </Card>
+                </SplideSlide>
+              );
+            })}
+          </Splide>
+        </Wrapper>
+      </div>
+    );
+  }
+  
 
 // Styled components for styling
 const Wrapper = styled.div` 
