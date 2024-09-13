@@ -29,15 +29,16 @@ To install project dependencies, run the following commands in the project direc
 npm install react-dom@latest --legacy-peer-deps  'if it does not work then' npm install react-dom@latest --force  
 npm install react@18.3.1 react-dom@18.3.1 --legacy-peer-deps   'and then'  npm install framer-motion react-icons react-router-dom styled-components --legacy-peer-deps
 npm install @react-oauth/google    "and then "      npm install @splidejs/react-splide --legacy-peer-deps
-npm install dotenv
+npm install dotenv --legacy-peer-deps
 npm install express --save
 npm install react-script --save
 npm install gapi-script
 npm install react-bootstrap
-npm install react-google-login--legacy-package-deps
+npm install react-google-login --legacy-peer-deps
+npm install mdb-react-ui-kit --legacy-peer-deps
 
-### Setting up the API Key and Google oauth credentials
+### Setting up all the API Key and Google oauth credentials
 
 1. Create a .env file in the root folder
 2. Insert you api key in the .env file and make the that the renaming is the same as where you use it in the code
-3. Insert your google oauth credentials in the .env file and make sure that the renaming of the credentials are the same as where you use it in the code
+3. Insert your google oauth credentials in the .env file and make sure that the renaming of the credentials are the same as where you use it in the code and that all secrets are removed
