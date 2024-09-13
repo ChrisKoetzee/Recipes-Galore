@@ -41,4 +41,4 @@ npm install mdb-react-ui-kit --legacy-peer-deps
 
 1. Create a .env file in the root folder
 2. Insert you api key in the .env file and make the that the renaming is the same as where you use it in the code
-3. Insert your google oauth credentials in the .env file and make sure that the renaming of the credentials are the same as where you use it in the code
+3. Insert your google oauth credentials in the .env file and make sure that the renaming of the credentials are the same as where you use it in the code and that all secrets are removed
