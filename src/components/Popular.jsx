@@ -5,6 +5,7 @@ import '@splidejs/react-splide/css';// Importing Splide CSS
 import { Link } from "react-router-dom";// Importing Link component for routing
 
 
+
 function Popular() {
     const [popular, setPopular] = useState([]);
   
@@ -44,19 +45,33 @@ function Popular() {
   
     return (
       <div>
-        <Wrapper>
+        <Wrapper >
           <h3>Trending Recipes</h3>
           <Splide
             options={{
-              perPage: 5,
               arrows: true,
               pagination: false,
               drag: "free",
               gap: "5rem",
-            }}
+              breakpoints: {
+                4000: {
+                  perPage: 4,
+                },
+                3000: {
+                  perPage: 3,
+                },
+                1024: {
+                  perPage: 2,
+                },
+                464: {
+                  perPage: 1,
+                }
+              }
+            }} 
           >
             {popular.map((recipe) => {
               return (
+                
                 <SplideSlide key={recipe.id}>
                   <Card>
                     <Link to={"/recipe/" + recipe.id}>
