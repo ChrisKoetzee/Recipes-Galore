@@ -1,57 +1,51 @@
 import React, { useState } from 'react';
-import { jwtDecode } from 'jwt-decode'; // Use named import
+import { jwtDecode } from 'jwt-decode';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 
-// Component for handling authentication with Google
 const AuthButton = () => {
-  // Retrieve Google OAuth client ID from environment variables
   const clientId = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
 
-  // State variable to track authentication status and user data
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null); // Correctly defined the user state
+  const [user, setUser] = useState(null);
 
-  // Function to handle successful login
-  const loginSuccessHandler = (credentialResponse) => {    
-    console.log("Login response: ", credentialResponse);
+  const loginSuccessHandler = (credentialResponse) => {
     if (credentialResponse.credential) {
-      const decodedUser = jwtDecode(credentialResponse.credential); // Decode the JWT to get user info
-      console.log("Login successful, Current user: ", decodedUser);
+      const decodedUser = jwtDecode(credentialResponse.credential);
+      console.log("Login successful, Current user:", decodedUser);
       setUser(decodedUser);
-      setIsAuthenticated(true); // Update authentication status to true
+      setIsAuthenticated(true);
+      console.log(decodedUser)
     }
   };
 
-  // Function to handle successful logout
-  const logoutSuccessHandler = () => {
+  const logoutHandler = () => {
+    googleLogout();
     console.log("Logout successful");
     setUser(null);
-    setIsAuthenticated(false); // Update authentication status to false
+    setIsAuthenticated(false);
   };
 
-  // Function to handle login failure
   const loginFailureHandler = (error) => {
-    console.error("Login failed, error: ", error);
+    console.error("Login failed, error:", error);
   };
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <div className='auth-button-container'>
+      <div className="auth-button-container">
         {isAuthenticated ? (
-          <button
-            onClick={() => {
-              console.log('user details', user);
-              googleLogout(); // Log the user out
-              logoutSuccessHandler(); // Handle the logout success
-            }}
-          >
-            Logout
-          </button>
+          <div>
+            <p>Welcome, {user?.name}!</p> {/* Display user's name */}
+            <img
+              src={user?.picture}
+              alt="User Profile"
+              style={{ width: '50px', borderRadius: '50%' }} // Display user's profile picture
+            />
+            <button onClick={logoutHandler} style={{padding: "1em"}}>Logout</button>
+          </div>
         ) : (
           <GoogleLogin
             onSuccess={loginSuccessHandler}
             onError={loginFailureHandler}
-            scope="profile email"
           />
         )}
       </div>
